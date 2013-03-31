@@ -22,24 +22,38 @@ Idea:
 	// }
 	// where the name acts like a query
 
-	messanger.on('setMessage',function( message [, params [, origin [, source]]] ){
-		myAppView.display( message );
+	messanger.on('setMessage',function( request, response ){
+
+		// request:
+		// {
+		//    name: <message originalMessage.data.name>,
+		//    data: <message originalMessage.data.data>,
+		//    params: { <parsed from name> },
+		//    origin: <message originalMessage.origin>,
+		//    source: <message originalMessage.source>
+		// }
+
+		// response is a messanger bound to the origin and source, so that you can:
+		// response.send(<name>,<data>);
+
+		myAppView.display( request.data );
 	});	
 
 	// regex matching
-	messanger.on(/set*/,function( data [, params [, origin [, source]]] ){
-		myAppView.setAlways( data );
+	messanger.on(/set*/,function( request ){
+		myAppView.setAlways( request.data );
 	});
 
 	// params
-	messanger.on('set/:that/to/:type',function( data [, params [, origin [, source]]] ){
-		console.log( params ); // -> { that: <..>, type: <..> }
+	messanger.on('set/:that/to/:type',function( request ){
+		console.log( request.params ); // -> { that: <..>, type: <..> }
 	});
 
-	messanger.send( otherWindow, {/* data */}, otherWindowOrigin );
+	messanger.send('name', {/* data */}, otherWindow, otherWindowOrigin );
 	// or
 	messanger.connect( otherWindow [, otherWindowOrigin='*'] );
-	messanger.send({/* data */});
+	messanger.send('name', {/* data */});
 	// or
 	messanger.autoConnect(true); // if messages come in senders will be auto registered
-	messanger.send(/* data */);
+	messanger.send('name', {/* data */});
+	
