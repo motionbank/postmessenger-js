@@ -8,6 +8,8 @@ https://developer.mozilla.org/en-US/docs/DOM/window.postMessage
 Idea:
 	var messanger = require('postmessanger');
 
+	// only listen to these origins:
+
 	messanger.listen('http://motionbank.org');
 	// or
 	messanger.listen([
@@ -20,9 +22,10 @@ Idea:
 	//    name: 'myFunkyName',
 	//	  data: <actual message data here>
 	// }
-	// where the name acts like a query
 
-	messanger.on('setMessage',function( request, response ){
+	// the name acts like a query and unmatched names will be ignored
+
+	messanger.on('aMessageName',function( request, response ){
 
 		// request:
 		// {
@@ -56,4 +59,3 @@ Idea:
 	// or
 	messanger.autoConnect(true); // if messages come in senders will be auto registered
 	messanger.send('name', {/* data */});
-	
