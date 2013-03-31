@@ -15,8 +15,25 @@ Idea:
 		'http://theforsythecompany.com'
 	]);
 
-	messanger.on('setMessage',function( message [,origin [, source]] ){
+	// uses simple format to wrap message data:
+	// {
+	//    name: 'myFunkyName',
+	//	  data: <actual message data here>
+	// }
+	// where the name acts like a query
+
+	messanger.on('setMessage',function( message [, params [, origin [, source]]] ){
 		myAppView.display( message );
+	});	
+
+	// regex matching
+	messanger.on(/set*/,function( data [, params [, origin [, source]]] ){
+		myAppView.setAlways( data );
+	});
+
+	// params
+	messanger.on('set/:that/to/:type',function( data [, params [, origin [, source]]] ){
+		console.log( params ); // -> { that: <..>, type: <..> }
 	});
 
 	messanger.send( otherWindow, {/* data */}, otherWindowOrigin );
