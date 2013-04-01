@@ -4,10 +4,10 @@ fjenett - 2013-03-31
 
 // DO NOT USE, NOT READY YET //
 
-See:
-https://developer.mozilla.org/en-US/docs/DOM/window.postMessage
+See: https://developer.mozilla.org/en-US/docs/DOM/window.postMessage
 
 Idea:
+
 	var messanger = require('postmessanger');
 
 	// only allow these origins:
