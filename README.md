@@ -10,11 +10,11 @@ Idea:
 
 	var messanger = require('postmessanger');
 
-	// only allow these origins:
+	// only trust these origins:
 
-	messanger.allow('http://motionbank.org');
+	messanger.trust('http://motionbank.org');
 	// or
-	messanger.allow([
+	messanger.trust([
 		'http://motionbank.org', 
 		'http://theforsythecompany.com'
 	]);
@@ -56,8 +56,8 @@ Idea:
 
 	messanger.send('name', {/* data */}, otherWindow, otherWindowOrigin );
 	// or
-	messanger.connect( otherWindow [, otherWindowOrigin='*'] );
+	messanger.to( otherWindow [, otherWindowOrigin='*'] );
 	messanger.send('name', {/* data */});
 	// or
-	messanger.autoConnect(true); // if messages come in senders will be auto registered
+	messanger.auto(true); // if messages come in senders will be auto registered
 	messanger.send('name', {/* data */});
