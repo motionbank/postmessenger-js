@@ -2,17 +2,19 @@
 
 fjenett - 2013-03-31
 
+// DO NOT USE, NOT READY YET //
+
 See:
 https://developer.mozilla.org/en-US/docs/DOM/window.postMessage
 
 Idea:
 	var messanger = require('postmessanger');
 
-	// only listen to these origins:
+	// only allow these origins:
 
-	messanger.listen('http://motionbank.org');
+	messanger.allow('http://motionbank.org');
 	// or
-	messanger.listen([
+	messanger.allow([
 		'http://motionbank.org', 
 		'http://theforsythecompany.com'
 	]);

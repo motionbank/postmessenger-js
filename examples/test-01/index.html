@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test 01</title>
+		<script src="../../dist/postmessenger.js"></script>
+	</head>
+	<body>
+		<iframe id="theiframe" src="iframe.html" onload=""></iframe>
+		<script type="text/javascript">
+			window.onload = function () {
+				
+				var iframeWin = document.getElementById('theiframe').contentWindow;
+
+				var messenger = new PostMessenger(window);
+				messenger.on( 'myAnswer', function ( request, response ) {
+					console.log( 'Received: ', request.data );
+				});
+				messenger.send(
+					'myMessage', 
+					{hello:'there!'}, 
+					iframeWin
+				);
+				messenger.send(
+					'ignoreThis', 
+					{}, 
+					iframeWin
+				);
+			}
+		</script>
+	</body>
+</html>

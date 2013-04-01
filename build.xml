@@ -4,7 +4,7 @@
 	
 		A window.postMessage() middleware
 
-		https://github.com/fjenett/postmessanger-js
+		https://github.com/fjenett/postmessenger-js
 	
 	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 		SETTINGS
@@ -14,7 +14,7 @@
 	<property name="bin" 		value="bin" 			/>
 	<property name="dist" 		value="dist" 			/>
 	<property name="docs" 		value="docs" 			/>
-	<property name="product"	value="postmessanger" 	/>
+	<property name="product"	value="postmessenger" 	/>
 	<property name="author"		value="Florian Jenett" 	/>
 	<property name="version" 	value="0.0.1" 			/>
 	

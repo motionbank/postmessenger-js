@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test 01</title>
+		<script src="../../dist/postmessenger.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.onload = function () {
+				var messenger = new PostMessenger(window);
+				messenger.on( 'myMessage', function ( request, response ) {
+					console.log( 'Received: ', request.data );
+					response.send( 'myAnswer', {fromMe:'hello back!'} );
+					response.send( 'myOtherAnswer', {toBe:'ignored!'} );
+				});
+			}
+		</script>
+	</body>
+</html>
