@@ -1,0 +1,5 @@
+bin
+dist
+resources/build_number
+.DS_Store
+thumbs.db

@@ -1,0 +1,104 @@
+<project name="PostMessageMiddleware" default="package" basedir="./">
+
+	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+	
+		A window.postMessage() middleware
+
+		https://github.com/fjenett/postmessanger-js
+	
+	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+		SETTINGS
+	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+	
+	<property name="src" 		value="src" 			/>
+	<property name="bin" 		value="bin" 			/>
+	<property name="dist" 		value="dist" 			/>
+	<property name="docs" 		value="docs" 			/>
+	<property name="product"	value="postmessanger" 	/>
+	<property name="author"		value="Florian Jenett" 	/>
+	<property name="version" 	value="0.0.1" 			/>
+	
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+	           			   classpath="/Users/fjenett/Dev/Processing/Libraries/_resources/closure-compiler/compiler.jar"/>
+	
+	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+		HELP
+	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+	<target name="help">
+		<echo>
+See readme for time being please.
+		</echo>
+	</target>
+	
+	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+		BUILD
+	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+	<target name="build">
+
+		<buildnumber file="resources/build_number"/>
+		
+		<delete dir="${bin}" />
+		<mkdir dir="${bin}" />
+		
+		<concat destfile="${bin}/${product}.js">
+			<fileset file="${src}/*.js" />
+		</concat>
+		
+		<jscomp compilationLevel="simple" warning="default" 
+		        debug="false" output="${bin}/${product}-compiled.js">
+			<sources dir="${bin}">
+				<file name="${product}.js" />
+			</sources>
+		</jscomp>
+		
+	</target>
+	
+	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+		PACK
+	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+	<target name="package" depends="build">
+		
+		<delete dir="${dist}" />
+		<mkdir dir="${dist}" />
+
+		<concat destfile="${dist}/${product}.js">
+			<fileset file="resources/js-header.js" />
+			<fileset file="${bin}/${product}-compiled.js" />
+		</concat>
+
+		<replaceregexp file="${dist}/${product}.js" flags="g"
+  					   match="##build##" replace="${build.number}" />
+		<replaceregexp file="${dist}/${product}.js" flags="g"
+  					   match="##version##" replace="${version}" />
+	</target>
+	
+	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+		INSTALL
+	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+	<target name="release" depends="package" >
+		
+		<zip destfile="releases/${product}-${version}.zip"
+	  	     basedir="${dist}"
+	  	     excludes="**/_DS.Store"
+		/>
+		
+	</target>
+	
+	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+		CLEAN
+	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+	<target name="clean" >
+
+		<delete dir="${dist}" />
+		<delete dir="${bin}" />
+
+	</target>
+
+	
+	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+		TEST
+	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+	<target name="test" depends="build">
+	</target>
+</project>
+
