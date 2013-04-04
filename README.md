@@ -1,29 +1,38 @@
-## A middleware for window.postMessage a la connect for node.js ##
+A middleware for window.postMessage
+============================================================
 
-fjenett - 2013-03-31
+// DO NOT YET USE IN PRODUCTION //
 
-// DO NOT USE, NOT READY YET //
+This project was inspired by things like connect for node.js. The idea is to abstract and simplify the messaging between windows or iframes. Both sides listen and respond to specific messages they agree on allowing for a simple way to implement protocols and answer-response setups.
 
 See: https://developer.mozilla.org/en-US/docs/DOM/window.postMessage
 
-Idea:
+## Mockup use case ##
 
-	var messanger = require('postmessanger');
+Set up the messenger:
+
+	var messenger = require('postmessenger');
 
 	// only trust these origins:
 
-	messanger.trust('http://motionbank.org');
+Optionally trust specific domains / origins (script's own origin is added by default):
+
+	messanger.accept('http://motionbank.org');
 	// or
-	messanger.trust([
+	messanger.accept([
 		'http://motionbank.org', 
 		'http://theforsythecompany.com'
 	]);
+
+A message consists of:
 
 	// uses simple format to wrap message data:
 	// {
 	//    name: 'myFunkyName',
 	//	  data: <actual message data here>
 	// }
+
+Now set up "routes" / message signatures to listen to and add callbacks:
 
 	// the name acts like a query and unmatched names will be ignored
 
@@ -54,6 +63,8 @@ Idea:
 		console.log( request.params ); // -> { that: <..>, type: <..> }
 	});
 
+Sending messages is as easy:
+
 	messanger.send('name', {/* data */}, otherWindow, otherWindowOrigin );
 	// or
 	messanger.to( otherWindow [, otherWindowOrigin='*'] );
@@ -61,3 +72,11 @@ Idea:
 	// or
 	messanger.auto(true); // if messages come in senders will be auto registered
 	messanger.send('name', {/* data */});
+
+	// send a message to all clients except the excluded
+	messanger.transport(message, [excludeWindow]);
+
+Note that not all of this is fully implemented yet.
+
+If you use it, i want links to your projects!
+

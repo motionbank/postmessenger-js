@@ -1,3 +1,7 @@
+/* NOTE ALL COMMENTS ARE REMOVED FROM SRC, PUT INTO resources/js-header.js */
+
+// TODO:
+// add WebWorkers? https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers
 
 if ( !(module && 'exports' in module) ) {
 	var module = {
@@ -82,13 +86,14 @@ var PostMessenger = module.exports = (function(win){
 		this.allowedOrigins = [];
 		this.matchers = [];
 		this.receivers = [];
+		this.connected = false;
 
 		if ( aWindow ) {
 			this.win = aWindow;
 			this.winOrigin = this.win.location.protocol + '//' + this.win.location.host;
 
-			this.trust( this.winOrigin );
-			this.listen();
+			this.accept( this.winOrigin );
+			this.connect();
 		} else {
 			this.winOrigin = win.location.protocol + '//' + win.location.host;
 		}
@@ -103,21 +108,21 @@ var PostMessenger = module.exports = (function(win){
 		 *		add wildcards? ... http://*.moba.org ... http://www.web-*.de
 		 *		and/or regex match?
 		 */
-		trust : function () {
+		accept : function () {
 			if ( arguments.length === 0 ) {
 				// adds the current origin to allowed origins
-				this.trust( this.winOrigin );
+				this.accept( this.winOrigin );
 			} else if ( arguments.length === 1 ) {
 				if ( typeof arguments[0] === 'string' ) {
 					this.allowedOrigins.push( arguments[0] );
 				} else if ( isArray( arguments[0] ) && arguments[0].length > 0 ) {
 					for ( var i = 0, k = arguments[0].length; i < k; i++ ) {
-						this.trust( arguments[0][i] );
+						this.accept( arguments[0][i] );
 					}
 				}
 			} else if ( arguments.length > 1 ) {
 				for ( var i = 0, k = arguments.length; i < k; i++ ) {
-					this.trust( arguments[i] );
+					this.accept( arguments[i] );
 				}
 			}
 		},
@@ -153,26 +158,34 @@ var PostMessenger = module.exports = (function(win){
 		/**
 		 *
 		 */
-		listen : function () {
+		connect : function () {
 			this.win.addEventListener( 'message', (function(pm){return function(msg){
-				pm.routeMessage(msg);
+				if ( pm.connected ) {
+					(function( winMessage ) {
+						if ( this.allowedOrigins.indexOf( winMessage.origin ) !== -1 ) {
+							var didMatch = false;
+							for ( var i = 0, k = this.matchers.length; i < k; i++ ) {
+								didMatch = didMatch || this.matchers[i].handle( winMessage );
+							}
+							if ( !didMatch ) {
+								console.log( 'Did not match and was ignored: ', winMessage, this.matchers );
+							}
+						} else {
+							console.log( 'Origin did not match: ', winMessage.origin, this.allowedOrigins );
+						}
+					}).apply(pm,[msg]);
+				}
 			}})(this) );
+			this.connected = true;
 		},
-		routeMessage : function( winMessage ) {
-			if ( this.allowedOrigins.indexOf( winMessage.origin ) !== -1 ) {
-				var didMatch = false;
-				for ( var i = 0, k = this.matchers.length; i < k; i++ ) {
-					didMatch = didMatch || this.matchers[i].handle( winMessage );
-				}
-				if ( !didMatch ) {
-					//console.log( 'Did not match and was ignored: ', winMessage, this.matchers );
-				}
-			} else {
-				//console.log( 'Origin did not match: ', winMessage.origin, this.allowedOrigins );
-			}
+		disconnect : function () {
+			this.connected = false;
 		},
+		/**
+		 *	myMessanger.add( otherWindow );
+		 */
 		to : function ( receiver ) {
-			if ( receiver && typeof receiver === 'object' ) {
+			if ( receiver && typeof receiver === 'object' && 'postMessage' in receiver ) {
 				this.receivers.push( receiver );
 			}
 		},
