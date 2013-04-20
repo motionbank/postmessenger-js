@@ -5,7 +5,9 @@ A middleware for window.postMessage
 
 This project was inspired by things like connect for node.js. The idea is to abstract and simplify the messaging between windows or iframes. Both sides listen and respond to specific messages they agree on allowing for a simple way to implement protocols and answer-response setups.
 
-See: https://developer.mozilla.org/en-US/docs/DOM/window.postMessage
+See: 
+- https://developer.mozilla.org/en-US/docs/DOM/window.postMessage
+- http://caniuse.com/#search=postmessage
 
 ## Mockup use case ##
 

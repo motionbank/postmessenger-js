@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Vimeo test 01</title>
+		<script src="../../src/postmessenger.js"></script>
+	</head>
+	<body>
+		<iframe id="vimeo_vid" src="http://player.vimeo.com/video/60560235?api=1" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+		<script type="text/javascript">
+			window.onload = function () {
+				
+				var iframeWin = document.getElementById('vimeo_vid').contentWindow;
+
+				var messenger = new PostMessenger(window);
+
+				messenger.accept( 'http://player.vimeo.com' );
+
+				messenger.on({
+					matcher: 'ready', 
+					callback: function ( req, resp ) {
+						console.log( 'Video ready' );
+					},
+					nameAlias: 'event'
+				});
+
+				messenger.on({
+					matcher: 'playProgress', 
+					callback: function ( req, resp ) {
+						console.log( req.data );
+					},
+					nameAlias: 'event',
+					dataAlias: 'data'
+				});
+
+				messenger.on({
+					matcher: 'pause', 
+					callback: function ( req, resp ) {
+						console.log( 'Video paused' );
+					},
+					nameAlias: 'event'
+				});
+
+				messenger.on({
+					matcher: 'finish', 
+					callback: function ( req, resp ) {
+						console.log( 'Video finished' );
+					},
+					nameAlias: 'event'
+				});
+
+				messenger.on({
+					matcher: /.+/, 
+					callback: function ( request, response ) {
+						console.log( 'Received: ', request.name );
+					},
+					nameAlias : 'event',
+					dataAlias : null
+				});
+
+				messenger.send({
+					name: 'addEventListener', data: 'ready', 
+					receiver: iframeWin, receiverOrigin: 'http://player.vimeo.com',
+					nameAlias: 'method', dataAlias: 'value'
+				});
+
+				messenger.send({
+					name: 'addEventListener', data: 'playProgress', 
+					receiver: iframeWin, receiverOrigin: 'http://player.vimeo.com',
+					nameAlias: 'method', dataAlias: 'value'
+				});
+
+				messenger.send({
+					name: 'addEventListener', data: 'pause', 
+					receiver: iframeWin, receiverOrigin: 'http://player.vimeo.com',
+					nameAlias: 'method', dataAlias: 'value'
+				});
+
+				messenger.send({
+					name: 'addEventListener', data: 'finish', 
+					receiver: iframeWin, receiverOrigin: 'http://player.vimeo.com',
+					nameAlias: 'method', dataAlias: 'value'
+				});
+			}
+		</script>
+	</body>
+</html>
