@@ -8,6 +8,7 @@ This project was inspired by things like connect for node.js. The idea is to abs
 See: 
 - https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
 - https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent
+- https://developer.mozilla.org/en-US/docs/Web/API/window.open
 - http://caniuse.com/#search=postmessage
 
 At some future point maybe even:

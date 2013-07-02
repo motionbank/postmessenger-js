@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test 01</title>
+		<script src="../../dist/postmessenger.js"></script>
+	</head>
+	<body>
+		<textarea id="fauxsole" style="width: 300px; height: 200px"></textarea>
+		<script type="text/javascript">
+			
+			var fauxsole = document.getElementById('fauxsole');
+			var fauxLog = function ( msg ) {
+				fauxsole.textContent += (new Date().getTime()) + ' > ' + msg + "\n";
+			}
+
+			window.onload = function () {
+				var otherWindow = window.open( "window.html", "Test 4 - other window", "width=420,height=230,resizable,scrollbars=yes,status=1" );
+				
+				if ( otherWindow ) {
+					fauxLog( 'Got other window' );
+				}
+
+				var messenger = new PostMessenger(window);
+				messenger.on( 'myAnswer', function ( request, response ) {
+					fauxLog( 'Received "myAnswer"' );
+					console.log( request.data );
+				});
+
+				messenger.on( 'heyHey', function (req, res) {
+
+					if ( req.data === 'hello!' ) {
+
+						fauxLog( 'Sending "myMessage"' );
+						messenger.send(
+							'myMessage', 
+							{hello:'there!'}, 
+							otherWindow
+						);
+
+						fauxLog( 'Sending "ignoreThis"' );
+						messenger.send(
+							'ignoreThis', 
+							{}, 
+							otherWindow
+						);
+						
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

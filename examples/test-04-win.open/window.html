@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test 01</title>
+		<script src="../../dist/postmessenger.js"></script>
+	</head>
+	<body style="padding: 0px; margin: 0px; overflow: hidden">
+		<textarea id="fauxsole" style="width: 300px; height: 200px"></textarea>
+		<script type="text/javascript">
+			
+			var fauxsole = document.getElementById('fauxsole');
+			var fauxLog = function ( msg ) {
+				fauxsole.textContent += (new Date().getTime()) + ' > ' + msg + "\n";
+			}
+
+			window.onload = function () {
+				var messenger = new PostMessenger(window);
+
+				messenger.on( 'myMessage', function ( request, response ) {
+					fauxLog( 'Received "myMessage"');
+					console.log( request.data );
+					fauxLog( 'Sending "myAnswer"');
+					response.send( 'myAnswer', {fromMe:'hello back!'} );
+					fauxLog( 'Sending "myOtherAnswer"');
+					response.send( 'myOtherAnswer', {toBe:'ignored!'} );
+				});
+
+				fauxLog( 'I\'m ready, calling home ...' );
+				messenger.send( 'heyHey', 'hello!', window.opener );
+			}
+		</script>
+	</body>
+</html>
