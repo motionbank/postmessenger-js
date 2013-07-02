@@ -26,13 +26,15 @@ Optionally trust specific domains / origins (script's own origin is added by def
 		'http://theforsythecompany.com'
 	]);
 
-A message consists of:
+A per default message consists of:
 
 	// uses simple format to wrap message data:
 	// {
 	//    name: 'myFunkyName',
 	//	  data: <actual message data here>
 	// }
+
+	( Note that this can be overriden in both .on() and .send(). )
 
 Now set up "routes" / message signatures to listen to and add callbacks:
 

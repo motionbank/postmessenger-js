@@ -55,6 +55,10 @@ var PostMessenger = module.exports = (function(win){
 	 }
 	 Matcher.prototype = {
 	 	handle : function ( winMessage ) {
+	 		if ( typeof winMessage.data !== 'string' ) {
+	 			debug( 'Ignored message because it\'s not a json string' );
+	 			return;
+	 		}
 	 		var data = winMessage.dataParsed = JSON.parse( winMessage.data );
 	 		if ( this.nameAlias in data && 
 	 			  this.test( data[this.nameAlias] ) ) {
@@ -169,6 +173,8 @@ var PostMessenger = module.exports = (function(win){
 
 			var m = new Matcher( opts.matcher, matcherFn, opts.callback, opts.context, opts.nameAlias, opts.dataAlias );
 			this.matchers.push(m);
+
+			return m;
 		},
 		/**
 		 *
@@ -208,13 +214,13 @@ var PostMessenger = module.exports = (function(win){
 		},
 		/**
 		 *	This should become : 
-		 *		- send( name, data, receiver )
+		 *		- send( name, data, receiver, receiverOrigin )
 		 *		- send({ name: ..., data: ..., receiver: ..., receiverOrigin: ..., nameAlias: ..., dataAlias, ... })
 		 */
-		send : function ( nameOrOpts, data, receiver ) {
+		send : function ( nameOrOpts, data, receiver, receiverOrigin ) {
 
 			var opts = !(arguments.length === 1 && typeof nameOrOpts === 'object') ? {
-					name: nameOrOpts, data: data, receiver: receiver
+					name: nameOrOpts, data: data, receiver: receiver, receiverOrigin: receiverOrigin
 				} : nameOrOpts;
 			opts.receiverOrigin = opts.receiverOrigin || this.winOrigin;
 			opts.nameAlias = opts.nameAlias || 'name';
@@ -225,10 +231,14 @@ var PostMessenger = module.exports = (function(win){
 			message[opts.dataAlias] = opts.data;
 
 			if ( opts.receiver ) {
-				opts.receiver.postMessage( JSON.stringify(message), opts.receiverOrigin );
+				var msg = JSON.stringify(message);
+				if ( 'postMessage' in opts.receiver && opts.receiver.postMessage ) {
+					opts.receiver.postMessage( msg, opts.receiverOrigin );
+				}
 			} else if ( this.receivers.length > 0 ) {
+				var msg = JSON.stringify(message);
 				for ( var i = 0, k = this.receivers.length; i < k; i++ ) {
-					this.receivers[0].postMessage( JSON.stringify(message), opts.receiverOrigin ); // TODO: same origin only?
+					this.receivers[0].postMessage( msg, opts.receiverOrigin ); // TODO: same origin only?
 				}
 			}
 		}
