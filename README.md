@@ -6,8 +6,16 @@ A middleware for window.postMessage
 This project was inspired by things like connect for node.js. The idea is to abstract and simplify the messaging between windows or iframes. Both sides listen and respond to specific messages they agree on allowing for a simple way to implement protocols and answer-response setups.
 
 See: 
-- https://developer.mozilla.org/en-US/docs/DOM/window.postMessage
+- https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
+- https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent
 - http://caniuse.com/#search=postmessage
+
+At some future point maybe even:
+- https://developer.mozilla.org/en-US/docs/Web/API/Worker
+- https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+
+Extremely helpfull for debugging:
+- http://www.briangrinstead.com/blog/chrome-developer-tools-monitorevents
 
 ## Mockup use case ##
 

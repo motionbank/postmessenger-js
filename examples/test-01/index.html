@@ -6,21 +6,33 @@
 		<script src="../../dist/postmessenger.js"></script>
 	</head>
 	<body>
-		<iframe id="theiframe" src="iframe.html" onload=""></iframe>
+		<iframe id="theiframe" src="iframe.html" style="width: 300px; border: 1px solid black; height: 200px"></iframe><br/>
+		<textarea id="fauxsole" style="width: 300px; height: 200px"></textarea>
 		<script type="text/javascript">
+			
+			var fauxsole = document.getElementById('fauxsole');
+			var fauxLog = function ( msg ) {
+				fauxsole.textContent += (new Date().getTime()) + ' > ' + msg + "\n";
+			}
+
 			window.onload = function () {
-				
 				var iframeWin = document.getElementById('theiframe').contentWindow;
+				if ( iframeWin ) {
+					fauxLog( 'Got iframe window' );
+				}
 
 				var messenger = new PostMessenger(window);
 				messenger.on( 'myAnswer', function ( request, response ) {
-					console.log( 'Received: ', request.data );
+					fauxLog( 'Received "myAnswer"' );
+					console.log( request.data );
 				});
+				fauxLog( 'Sending "myMessage"' );
 				messenger.send(
 					'myMessage', 
 					{hello:'there!'}, 
 					iframeWin
 				);
+				fauxLog( 'Sending "ignoreThis"' );
 				messenger.send(
 					'ignoreThis', 
 					{}, 

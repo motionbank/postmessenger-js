@@ -44,13 +44,15 @@ See readme for time being please.
 			<fileset file="${src}/*.js" />
 		</concat>
 		
-		<jscomp compilationLevel="simple" warning="default" 
-		        debug="false" output="${bin}/${product}-compiled.js">
+		<jscomp compilationLevel="simple" 
+				warning="default" 
+		        debug="false" 
+		        output="${bin}/${product}-compiled.js">
 			<sources dir="${bin}">
 				<file name="${product}.js" />
 			</sources>
 		</jscomp>
-		
+
 	</target>
 	
 	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +

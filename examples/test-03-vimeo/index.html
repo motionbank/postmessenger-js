@@ -2,11 +2,15 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Vimeo test 01</title>
+		<title>Test 03 - Vimeo player API</title>
 		<script src="../../src/postmessenger.js"></script>
 	</head>
 	<body>
-		<iframe id="vimeo_vid" src="http://player.vimeo.com/video/60560235?api=1" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+		<iframe id="vimeo_vid" src="http://player.vimeo.com/video/60560235?api=1" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe><br />
+		<ul>
+			<li><a id="playBtn" href="#">play</a></li>
+			<li><a id="pauseBtn" href="#">pause</a></li>
+		</ul>
 		<script type="text/javascript">
 			window.onload = function () {
 				
@@ -81,6 +85,20 @@
 					receiver: iframeWin, receiverOrigin: 'http://player.vimeo.com',
 					nameAlias: 'method', dataAlias: 'value'
 				});
+
+				var wireBtn = function ( btnId, btnAction ) {
+					document.getElementById(btnId).onclick = function () {
+						messenger.send({
+							name: btnAction, data: '', 
+							receiver: iframeWin, receiverOrigin: 'http://player.vimeo.com',
+							nameAlias: 'method', dataAlias: 'value'
+						});
+					}
+				}
+
+				wireBtn( "playBtn", "play" );
+				wireBtn( "pauseBtn", "pause" );
+
 			}
 		</script>
 	</body>

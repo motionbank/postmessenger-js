@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test 02 - YouTube player API</title>
+		<script src="../../src/postmessenger.js"></script>
+	</head>
+	<body>
+		<!-- <iframe id="yt-video" width="640" height="360" 
+				src="http://www.youtube.com/embed/8FVMb2m9sjQ?autoplay=1&amp;enablejsapi=1&amp;origin=http://localhost:8080" 
+				frameborder="0" allowfullscreen></iframe> --><br />
+		<div id="yt-player"></div><br/>
+		<ul>
+			<li><a id="playBtn" href="#">play</a></li>
+			<li><a id="pauseBtn" href="#">pause</a></li>
+		</ul>
+		<textarea id="fauxsole" style="width: 640px; height: 200px"></textarea>
+		<script type="text/javascript">
+			
+			var fauxsole = document.getElementById('fauxsole');
+			var fauxLog = function ( msg ) {
+				fauxsole.textContent += (new Date().getTime()) + ' > ' + msg + "\n";
+			}
+
+			var messenger = new PostMessenger( window );
+			messenger.accept( 'http://youtube.com', 'http://www.youtube.com' );
+
+			messenger.on({
+				matcher: 'initialDelivery', 
+				nameAlias: 'event', dataAlias: 'info',
+				callback: function ( req, res ) {
+					//console.log( req.data );
+				}
+			});
+
+			messenger.on({
+				matcher: 'onReady', 
+				nameAlias: 'event', dataAlias: 'info',
+				callback: function ( req, res ) {
+					// res.send({
+					// 	name: 'command',
+					// 	data: null,
+					// 	args: {
+					// 		func: 'playVideo',
+					// 		args: [],
+					// 		id: req.message.data.id
+					// 	}
+					// });
+				}
+			});
+
+			messenger.on({
+				matcher: 'infoDelivery',
+				nameAlias: 'event', dataAlias: 'info',
+				callback: function ( req, res ) {
+					//console.log( req.data );
+				}
+			});
+
+			var wireBtn = function ( btnId, btnAction, aWindow ) {
+				document.getElementById( btnId ).onclick = function () {
+					messenger.send({
+						name: 'command', data: null,
+						nameAlias: 'event', dataAlias: 'info',
+						args: {
+							func: btnAction,
+							args: [],
+							id: 1
+						},
+						receiver: aWindow,
+						receiverOrigin: 'http://www.youtube.com'
+					});
+				}
+			}
+
+			var tag = document.createElement('script');
+			tag.src = "https://www.youtube.com/player_api";
+			var firstScriptTag = document.getElementsByTagName('script')[0];
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+			var player;
+			function onYouTubePlayerAPIReady() {
+				player = new YT.Player('yt-player', {
+					height: '390',
+					width: '640',
+					videoId: '8FVMb2m9sjQ'
+				});
+
+				var ytIframe = player.getIframe();
+
+				wireBtn( 'playBtn', 'playVideo', ytIframe.contentWindow );
+				wireBtn( 'pauseBtn', 'pauseVideo', ytIframe.contentWindow );
+			}
+		</script>
+	</body>
+</html>
