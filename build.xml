@@ -9,6 +9,8 @@
 	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 		SETTINGS
 	+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+
+	<property name="absolute.path" location="${basedir}"/>
 	
 	<property name="src" 		value="src" 			/>
 	<property name="bin" 		value="bin" 			/>
@@ -72,6 +74,19 @@ See readme for time being please.
   					   match="##build##" replace="${build.number}" />
 		<replaceregexp file="${dist}/${product}.js" flags="g"
   					   match="##version##" replace="${version}" />
+
+  		<copy todir="${dist}/docs">
+			<fileset dir="resources/docco-template" />
+		</copy>	
+		<!-- <mkdir dir="${dist}/docs" /> -->
+		<exec executable="/usr/local/bin/docco">
+			<env key="PATH" path="${env.PATH}:/usr/local/bin"/>
+			<arg value="-o" />
+			<arg value="${absolute.path}/${dist}/docs" />
+			<arg value="${absolute.path}/${src}/${product}.js" />
+		</exec>
+		<move file="${dist}/docs/${product}.html" 
+			  tofile="${dist}/docs/index.html"/>
 	</target>
 	
 	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +

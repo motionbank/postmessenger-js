@@ -10,6 +10,7 @@
 		<ul>
 			<li><a id="playBtn" href="#">play</a></li>
 			<li><a id="pauseBtn" href="#">pause</a></li>
+			<li><a id="seekBtn" href="#">seek random</a></li>
 		</ul>
 		<script type="text/javascript">
 			window.onload = function () {
@@ -17,6 +18,7 @@
 				var iframeWin = document.getElementById('vimeo_vid').contentWindow;
 
 				var messenger = new PostMessenger(window);
+				var duration = -1;
 
 				messenger.accept( 'http://player.vimeo.com' );
 
@@ -32,6 +34,7 @@
 					matcher: 'playProgress', 
 					callback: function ( req, resp ) {
 						console.log( req.data );
+						duration = parseFloat( req.data.duration );
 					},
 					nameAlias: 'event',
 					dataAlias: 'data'
@@ -86,10 +89,10 @@
 					nameAlias: 'method', dataAlias: 'value'
 				});
 
-				var wireBtn = function ( btnId, btnAction ) {
+				var wireBtn = function ( btnId, btnAction, valueGen ) {
 					document.getElementById(btnId).onclick = function () {
 						messenger.send({
-							name: btnAction, data: '', 
+							name: btnAction, data: (valueGen && valueGen()) || '', 
 							receiver: iframeWin, receiverOrigin: 'http://player.vimeo.com',
 							nameAlias: 'method', dataAlias: 'value'
 						});
@@ -98,6 +101,9 @@
 
 				wireBtn( "playBtn", "play" );
 				wireBtn( "pauseBtn", "pause" );
+				wireBtn( "seekBtn", "seekTo", function () {
+					return Math.random() * duration;
+				});
 
 			}
 		</script>

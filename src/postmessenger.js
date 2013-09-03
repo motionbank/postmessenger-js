@@ -1,4 +1,3 @@
-/* NOTE ALL COMMENTS ARE REMOVED FROM SRC, PUT INTO resources/js-header.js */
 
 // TODO:
 // add WebWorkers? https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers
@@ -32,7 +31,11 @@ var PostMessenger = module.exports = (function(win){
 	}
 
 	var debug = function () {
-		console.log( arguments );
+		if ( false ) {
+			if ( 'console' in window && console.log ) {
+				console.log( arguments );
+			}
+		}
 	}
 
 	var sendArgsToOpts = function ( nameOrOpts, data, receiver, receiverOrigin ) {
@@ -45,13 +48,7 @@ var PostMessenger = module.exports = (function(win){
 		return opts;
 	}
 
-	/*
-	 +	Class Matcher
-	 *
-	 *	TODO:
-	 *		use for matching origins as well?
-	 +
-	 L + + + + + + + + + + + + + + + + + + + */
+	//#Class Matcher
 
 	 var Matcher = function ( id, matcherFn, callback, context, nameAlias, dataAlias ) {
 
@@ -97,10 +94,8 @@ var PostMessenger = module.exports = (function(win){
 	 	}
 	 }
 
-	/*
-	 +	Class Request
-	 +
-	 L + + + + + + + + + + + + + + + + + + + */
+
+	//#Class Request
 
 	 var Request = function ( matcher, winMessage ) {
 	 	this.name = winMessage.dataParsed[matcher.nameAlias];
@@ -111,19 +106,13 @@ var PostMessenger = module.exports = (function(win){
 	 	this.params = {};
 	 }
 
-
-	/*
-	 +	Class PostMessenger
-	 +
-	 L + + + + + + + + + + + + + + + + + + + */
+	//#Class PostMessenger
 	 
-	/**
-	 *	Constructor
-	 */
+	//##PostMessenger constructor
 	var PostMessenger = function ( aWindow ) {
 
 		this.hash = btoa( 'PM' + (++gPostMassengerId) ) . toUpperCase();
-		console.log( 'new PostMessenger#' + this.hash );
+		debug( 'new PostMessenger#' + this.hash );
 
 		this.allowedOrigins = [];
 		this.matchers = [];
@@ -150,6 +139,7 @@ var PostMessenger = module.exports = (function(win){
 		 *		add wildcards? ... http://*.moba.org ... http://www.web-*.de
 		 *		and/or regex match?
 		 */
+		//accept()
 		accept : function () {
 			if ( arguments.length === 0 ) {
 				// adds the current origin to allowed origins
@@ -176,6 +166,7 @@ var PostMessenger = module.exports = (function(win){
 		 *	TODO:
 		 *		allow for matcher to be a function that returns true/false?
 		 */
+		//on()
 		on : function ( matcherOrOpts, callback, context ) {
 
 			var opts = !(arguments.length === 1 && typeof matcherOrOpts === 'object') ? {
@@ -211,6 +202,7 @@ var PostMessenger = module.exports = (function(win){
 		/**
 		 *
 		 */
+		//connect()
 		connect : function () {
 			this.win.addEventListener( 'message', 
 									  (function connectIIFE (pm){
@@ -223,9 +215,9 @@ var PostMessenger = module.exports = (function(win){
 								didMatch = didMatch || this.matchers[i].handle( winMessage );
 							}
 							if ( !didMatch ) {
-								console.log( 'Did not match and was ignored: ' );
-								try { console.log( winMessage.data, winMessage.origin ); } catch ( e ) {}
-								console.log( 'Matchers', this.matchers );
+								debug( 'Did not match and was ignored: ' );
+								try { debug( winMessage.data, winMessage.origin ); } catch ( e ) {}
+								debug( 'Matchers', this.matchers );
 							}
 						} else {
 							console.log( 'Origin did not match: ', winMessage.origin, this.allowedOrigins );
@@ -235,12 +227,14 @@ var PostMessenger = module.exports = (function(win){
 			}})(this) );
 			this.connected = true;
 		},
+		//disconnect()
 		disconnect : function () {
 			this.connected = false;
 		},
 		/**
 		 *	myMessenger.add( otherWindow );
 		 */
+		//to()
 		to : function ( receiver ) {
 			if ( receiver && typeof receiver === 'object' && 'postMessage' in receiver ) {
 				this.receivers.push( receiver );
@@ -253,6 +247,7 @@ var PostMessenger = module.exports = (function(win){
 		 *		- send( name, data, receiver, receiverOrigin )
 		 *		- send({ name: ..., data: ..., receiver: ..., receiverOrigin: ..., nameAlias: ..., dataAlias: ..., args: {...} })
 		 */
+		//send()
 		send : function ( nameOrOpts, data, receiver, receiverOrigin ) {
 
 			var opts = sendArgsToOpts.apply(null, arguments);
