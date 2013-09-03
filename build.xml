@@ -18,7 +18,7 @@
 	<property name="docs" 		value="docs" 			/>
 	<property name="product"	value="postmessenger" 	/>
 	<property name="author"		value="Florian Jenett" 	/>
-	<property name="version" 	value="0.0.1" 			/>
+	<property name="version" 	value="0.0.2" 			/>
 	
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
 	           			   classpath="/Users/fjenett/Dev/Processing/Libraries/_resources/closure-compiler/compiler.jar"/>
@@ -75,6 +75,7 @@ See readme for time being please.
 		<replaceregexp file="${dist}/${product}.js" flags="g"
   					   match="##version##" replace="${version}" />
 
+		<!-- DOCUMENTATION -->
   		<copy todir="${dist}/docs">
 			<fileset dir="resources/docco-template" />
 		</copy>	
@@ -87,6 +88,13 @@ See readme for time being please.
 		</exec>
 		<move file="${dist}/docs/${product}.html" 
 			  tofile="${dist}/docs/index.html"/>
+
+		<!-- package.json -->
+		<replaceregexp file="resources/package.json" flags="g"
+  					   match="##version##" replace="${version}" />
+  		<copy todir=".">
+			<fileset file="resources/package.json" />
+		</copy>	
 	</target>
 	
 	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
