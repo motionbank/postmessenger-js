@@ -1,0 +1,19 @@
+{
+  "name"          : "postmessenger",
+  "description"   : "A connect inspired middleware wrapping the HTML5 postMessage() API",
+  "url"           : "https://github.com/fjenett/postmessenger-js",
+  "keywords"      : ["html5", "client", "middleware", "messaging", "browser", "DOM"],
+  "author"        : "Florian Jenett <mail@florianjenett.de>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fjenett/postmessenger-js"
+  },
+  "dependencies"  : {
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+  },
+  "main"          : "postmessenger.js",
+  "version"       : "0.0.1"
+}
