@@ -12,9 +12,6 @@
   },
   "devDependencies": {
   },
-  "scripts": {
-    "test" : "echo 'not yet done'"
-  },
   "main"          : "releases/postmessenger-current.js",
   "version"       : "##version##"
 }
