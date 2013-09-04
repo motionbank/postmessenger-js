@@ -6,7 +6,7 @@
  *
  *	Started: fjenett 20130401
  *	Version: 0.0.5
- *	Build: 96
+ *	Build: 97
  */
 if(!(module&&"exports"in module))var module={exports:{}};if(!window)throw"PostMessenger can only run in a window context.";
 var PostMessenger=module.exports=function(i){var l=(new Date).getTime(),j=function(a,d,f,b){return!(1===arguments.length&&"object"===typeof a)?{name:a,data:d,receiver:f,receiverOrigin:b}:a},k=function(a,d,f,b,c,e){this.id=a;var g=this;this.test=function(a){return d.apply(g,[a])};this.callback=f;this.context=b;this.nameAlias=c;this.dataAlias=e};k.prototype={handle:function(a){if("string"===typeof a.data){var d=a.dataParsed=JSON.parse(a.data);if(this.nameAlias in d&&this.test(d[this.nameAlias])){var f=
