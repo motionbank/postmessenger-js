@@ -1,1 +1,1 @@
-module.exports = require('dist/postmessenger');
+module.exports = require('releases/postmessenger-current');

@@ -90,12 +90,18 @@ See readme for time being please.
 			  tofile="${dist}/docs/index.html"/>
 
 		<!-- package.json -->
-		<replaceregexp file="resources/package.json" flags="g"
-  					   match="##version##" replace="${version}" />
-  		<copy todir=".">
+		<copy todir=".">
 			<fileset file="resources/package.json" />
-		</copy>	
-	</target>
+		</copy>
+
+		<replaceregexp file="package.json" flags="g"
+  					   match="##version##" replace="${version}" />
+
+		<copy tofile="releases/${product}-current.js">
+			<fileset file="${dist}/${product}.js" />
+		</copy>
+
+  	</target>
 	
 	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 		INSTALL
