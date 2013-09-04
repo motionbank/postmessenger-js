@@ -90,6 +90,7 @@ See readme for time being please.
 			  tofile="${dist}/docs/index.html"/>
 
 		<!-- package.json -->
+		<delete file="package.json" />
 		<copy todir=".">
 			<fileset file="resources/package.json" />
 		</copy>
@@ -98,6 +99,7 @@ See readme for time being please.
   					   match="##version##" replace="${version}" />
 
 		<!-- bower.json -->
+		<delete file="bower.json" />
 		<copy tofile="bower.json">
 			<fileset file="package.json" />
 		</copy>
