@@ -18,7 +18,7 @@
 	<property name="docs" 		value="docs" 			/>
 	<property name="product"	value="postmessenger" 	/>
 	<property name="author"		value="Florian Jenett" 	/>
-	<property name="version" 	value="0.0.7" 			/>
+	<property name="version" 	value="0.0.8" 			/>
 	
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
 	           			   classpath="/Users/fjenett/Dev/Processing/Libraries/_resources/closure-compiler/compiler.jar"/>
