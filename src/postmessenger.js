@@ -180,7 +180,7 @@ var PostMessenger = module.exports = (function(win){
 			if ( typeof opts.matcher === 'string' ) {
 				matcherFn = function ( other ) { return other === opts.matcher };
 			} else if ( isRegex( opts.matcher ) ) {
-				matcherFn = function ( other ) { return other.match( opts.matcher ) };
+				matcherFn = function ( other ) { return other.test( opts.matcher ) };
 			} else {
 				throw( 'Matcher can only be a string or regex' );
 			}
@@ -204,15 +204,16 @@ var PostMessenger = module.exports = (function(win){
 		 */
 		//connect()
 		connect : function () {
-			this.win.addEventListener( 'message', 
-									  (function connectIIFE (pm){
-									  	 return function connectCurry (msg){
+			this.win.addEventListener(
+				'message', 
+				(function connectIIFE (pm){
+					return function connectCurry (msg){
 				if ( pm.connected ) {
 					(function connectHandleReceiveMessage ( winMessage ) {
 						if ( this.allowedOrigins.indexOf( winMessage.origin ) !== -1 ) {
 							var didMatch = false;
 							for ( var i = 0, k = this.matchers.length; i < k; i++ ) {
-								didMatch = didMatch || this.matchers[i].handle( winMessage );
+								if ( this.matchers[i].handle( winMessage ) ) didMatch = true;
 							}
 							if ( !didMatch ) {
 								debug( 'Did not match and was ignored: ' );
@@ -220,11 +221,14 @@ var PostMessenger = module.exports = (function(win){
 								debug( 'Matchers', this.matchers );
 							}
 						} else {
-							console.log( 'Origin did not match: ', winMessage.origin, this.allowedOrigins );
+							console.log( this, winMessage.origin, this.allowedOrigins );
+							throw( 'Origin not allowed: '+winMessage.origin );
 						}
 					}).apply(pm,[msg]);
 				}
-			}})(this) );
+			}/*connectCurry*/
+			})(this)/*connectIIFE*/
+			);/*addEventListener*/
 			this.connected = true;
 		},
 		//disconnect()
