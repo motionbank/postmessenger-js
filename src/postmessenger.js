@@ -30,6 +30,10 @@ var PostMessenger = module.exports = (function(win){
 		return (Object.prototype.toString.call( rgx ) === '[object RegExp]');
 	}
 
+	var isFunction = function ( fn ) {
+		return fn && (typeof fn === 'function') && (fn instanceof Function);
+	}
+
 	var debug = function () {
 		if ( false ) {
 			if ( 'console' in window && console.log ) {
@@ -163,8 +167,6 @@ var PostMessenger = module.exports = (function(win){
 		 *
 		 *	Wire up the actions to take based upon certain events.
 		 *
-		 *	TODO:
-		 *		allow for matcher to be a function that returns true/false?
 		 */
 		//on()
 		on : function ( matcherOrOpts, callback, context ) {
@@ -181,8 +183,10 @@ var PostMessenger = module.exports = (function(win){
 				matcherFn = function ( other ) { return other === opts.matcher };
 			} else if ( isRegex( opts.matcher ) ) {
 				matcherFn = function ( other ) { return other.test( opts.matcher ) };
+			} else if ( isFunction( opts.matcher ) ) {
+				matcherFn = function ( other ) { return opts.matcher.apply(null,[other]) };
 			} else {
-				throw( 'Matcher can only be a string or regex' );
+				throw( 'Matcher can only be a string, regex or function.' );
 			}
 
 			if ( typeof opts.callback !== 'function' ) {
