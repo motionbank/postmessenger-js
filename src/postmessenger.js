@@ -149,7 +149,8 @@ var PostMessenger = module.exports = (function(win){
 				// adds the current origin to allowed origins
 				this.accept( this.winOrigin );
 			} else if ( arguments.length === 1 ) {
-				if ( typeof arguments[0] === 'string' ) {
+				if ( typeof arguments[0] === 'string' && 
+					 this.allowedOrigins.indexOf(arguments[0]) === -1 ) {
 					this.allowedOrigins.push( arguments[0] );
 				} else if ( isArray( arguments[0] ) && arguments[0].length > 0 ) {
 					for ( var i = 0, k = arguments[0].length; i < k; i++ ) {
@@ -182,7 +183,7 @@ var PostMessenger = module.exports = (function(win){
 			if ( typeof opts.matcher === 'string' ) {
 				matcherFn = function ( other ) { return other === opts.matcher };
 			} else if ( isRegex( opts.matcher ) ) {
-				matcherFn = function ( other ) { return other.test( opts.matcher ) };
+				matcherFn = function ( other ) { return opts.matcher.test( other ) };
 			} else if ( isFunction( opts.matcher ) ) {
 				matcherFn = function ( other ) { return opts.matcher.apply(null,[other]) };
 			} else {
