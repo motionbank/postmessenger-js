@@ -3,17 +3,15 @@
 // add WebWorkers? https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers
 // add WebSockets?
 
-if ( !(module && 'exports' in module) ) {
-	var module = {
-		exports : {}
-	};
-}
-
-if ( !window ) {
+if ( typeof window === 'undefined' ) {
 	throw( 'PostMessenger can only run in a window context.' );
 }
 
-var PostMessenger = module.exports = (function(win){
+if ( !( 'JSON' in window ) ) {
+	throw( 'Your browser does not support JSON parsing / generation' );
+}
+
+var PostMessenger = (function(win){
 
 	var gPostMassengerId = (new Date()).getTime();
 
