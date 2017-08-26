@@ -1,5 +1,5 @@
 A middleware for window.postMessage
-============================================================
+====
 
 // DO NOT YET USE IN PRODUCTION //
 
