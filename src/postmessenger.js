@@ -291,7 +291,5 @@ var PostMessenger = (function(win){
 })(window);
 
 if (module && module.exports) {
-    module.exports = {
-        PostMessenger: PostMessenger
-    }
+    module.exports = PostMessenger
 }

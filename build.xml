@@ -21,7 +21,9 @@
 	<property name="version" 	value="0.0.10" 			/>
 	
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
-	           			   classpath="/Users/fjenett/Dev/Processing/Libraries/_resources/closure-compiler/compiler.jar"/>
+	           			   classpath="resources/closure-compiler-v20170806.jar"/>
+
+	<property name="doccoPath" value="/Users/fjenett/.nvm/versions/node/v8.2.1/bin/docco" />
 	
 	<!--- + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 		HELP
@@ -80,14 +82,14 @@ See readme for time being please.
 			<fileset dir="resources/docco-template" />
 		</copy>	
 		<!-- <mkdir dir="${dist}/docs" /> -->
-		<exec executable="/usr/local/bin/docco">
+<!--		<exec executable="${doccoPath}">
 			<env key="PATH" path="${env.PATH}:/usr/local/bin"/>
 			<arg value="-o" />
 			<arg value="${absolute.path}/${dist}/docs" />
 			<arg value="${absolute.path}/${src}/${product}.js" />
 		</exec>
 		<move file="${dist}/docs/${product}.html" 
-			  tofile="${dist}/docs/index.html"/>
+			  tofile="${dist}/docs/index.html"/> -->
 
 		<!-- package.json -->
 		<delete file="package.json" />
