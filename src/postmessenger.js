@@ -289,3 +289,9 @@ var PostMessenger = (function(win){
 	}
 	return PostMessenger;
 })(window);
+
+if (module && module.exports) {
+    module.exports = {
+        PostMessenger: PostMessenger
+    }
+}
