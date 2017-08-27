@@ -6,7 +6,7 @@
  *
  *	Started: fjenett 20130401
  *	Version: 0.0.10
- *	Build: 6
+ *	Build: 7
  */
 if("undefined"===typeof window)throw"PostMessenger can only run in a window context.";if(!("JSON"in window))throw"Your browser does not support JSON parsing / generation";
 var PostMessenger=function(k){var n=(new Date).getTime(),p=function(a){return a&&"function"===typeof a&&a instanceof Function},l=function(a,d,f,b){return 1!==arguments.length||"object"!==typeof a?{name:a,data:d,receiver:f,receiverOrigin:b}:a},m=function(a,d,f,b,c,e){this.id=a;var g=this;this.test=function(a){return d.apply(g,[a])};this.callback=f;this.context=b;this.nameAlias=c;this.dataAlias=e};m.prototype={handle:function(a){if("string"===typeof a.data){var d=a.dataParsed=JSON.parse(a.data);if(this.nameAlias in
